@@ -11,4 +11,5 @@ wheels/
 
 # Data
 /weights
-regions.csv
+/regions.csv
+/ScepterSDK
