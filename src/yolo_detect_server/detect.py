@@ -1,26 +1,49 @@
 import numpy as np
 import polars as pl
-from ultralytics import YOLO
+from rknn.api import RKNN
 
-from .config import MODEL_PATH
+from .config import DEVICE_ID, IMG_SIZE, RKNN_MODEL_PATH, TARGET_PLATFORM
+from .postprocess import decode_output, letterbox
 from .util import xywh_to_xyxy
 
 
-model = YOLO(MODEL_PATH)
+def _init_model() -> RKNN:
+    """Load the RKNN model and initialise the RKNPU runtime."""
+    rknn = RKNN()
+
+    if (ret := rknn.load_rknn(RKNN_MODEL_PATH)) != 0:
+        raise RuntimeError(f"load_rknn failed with error code {ret}")
+
+    if (ret := rknn.init_runtime(target=TARGET_PLATFORM, device_id=DEVICE_ID)) != 0:
+        raise RuntimeError(f"init_runtime failed with error code {ret}")
+
+    return rknn
+
+
+model = _init_model()
 
 df = pl.read_csv("regions.csv")
 REGIONS = [xywh_to_xyxy(row) for row in df.iter_rows()]
 
 
 def find_packed(img: np.ndarray) -> list[str]:
-    result = model.predict(img, conf=0.6)[0] # type: ignore
+    orig_h, orig_w = img.shape[:2]
+    letterboxed, gain, pad_x, pad_y = letterbox(img, new_shape=IMG_SIZE)
+    rgb = letterboxed[..., ::-1]  # BGR -> RGB, as Ultralytics did
+
+    outputs = model.inference(inputs=[rgb])
+    boxes = decode_output(
+        outputs[0],
+        orig_shape=(orig_h, orig_w),
+        gain=gain,
+        pad_x=pad_x,
+        pad_y=pad_y,
+    )
 
     packed = []
     # TODO: 理论上存在误检导致相同库位中存在多个结果的可能性，后续可以考虑进行优化
-    for box in result.boxes: # type: ignore
-        if box.cls.cpu().numpy()[0] != 0: # type: ignore
-            continue
-        x, y, _, _ = box.xyxyn.cpu().numpy()[0] # type: ignore
+    for box in boxes:
+        x, y = (box[0] + box[2]) / orig_w, (box[1] + box[3]) / orig_h  # center point, normalized
         for region in REGIONS:
             if region.contains(x, y):
                 packed.append(region.name)

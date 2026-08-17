@@ -10,8 +10,11 @@ requires-python = ">=3.12, <3.13"
 dependencies = [
     "fastapi[standard]>=0.141.1",
     "numpy>=1.26.4",
+    "opencv-python>=4.10.0.84",
     "polars>=1.43.2",
     "pydantic>=2.13.4",
+    "rknn-toolkit2>=2.3.2",
+    "setuptools<82",
     "ultralytics>=8.4.120",
     "uvicorn>=0.52.1",
 ]
