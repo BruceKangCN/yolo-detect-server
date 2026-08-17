@@ -20,7 +20,7 @@ def find_packed(img: np.ndarray) -> list[str]:
     for box in result.boxes: # type: ignore
         if box.cls.cpu().numpy()[0] != 0: # type: ignore
             continue
-        x, y, _, _ = box.xyxyn.cpu().numpy() # type: ignore
+        x, y, _, _ = box.xyxyn.cpu().numpy()[0] # type: ignore
         for region in REGIONS:
             if region.contains(x, y):
                 packed.append(region.name)

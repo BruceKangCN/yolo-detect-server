@@ -1,9 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 
-from .camera import get_frame
-from .detect import find_packed
-from .util import Detection
+from yolo_detect_server.camera import get_frame
+from yolo_detect_server.detect import find_packed
+from yolo_detect_server.util import Detection
 
 
 app = FastAPI()
