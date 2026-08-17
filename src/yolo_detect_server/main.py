@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 
+from .camera import get_frame
 from .detect import find_packed
 from .util import Detection
 
@@ -18,8 +19,9 @@ async def detect() -> Detection:
     """
 
     try:
-        import numpy as np
-        img = np.random.randint(0, 256, (480, 640, 3), dtype=np.uint8) # TODO
+        img = get_frame()
+        if img is None:
+            return Detection(code=1)
         packed = find_packed(img)
         return Detection(code=0, packed=packed)
     except Exception as ex:
