@@ -5,8 +5,8 @@ from yolo_detect_server.camera import get_frame
 from yolo_detect_server.detect import find_packed
 from yolo_detect_server.util import Detection
 
-
 app = FastAPI()
+
 
 @app.get("/", summary="detect pack place status")
 async def detect() -> Detection:

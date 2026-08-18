@@ -5,15 +5,16 @@ from .config import ROI_RATIO
 
 class Region(BaseModel):
     name: str
-    t: float # top
-    l: float # left
-    b: float # bottom
-    r: float # right
+    priority: int = 0
+    t: float  # top
+    l: float  # left
+    b: float  # bottom
+    r: float  # right
 
     def contains(self, x: float, y: float) -> bool:
         if x < self.l or x > self.r:
             return False
-        if y < self.t or y > self.b:
+        if y < self.t or y > self.b:  # noqa: SIM103
             return False
         return True
 
@@ -41,10 +42,15 @@ class Detection(BaseModel):
     """
 
 
-def xywh_to_xyxy(row: tuple[str, float, float, float, float]) -> Region:
+def xywh_to_xyxy(row: tuple[str, int, float, float, float, float]) -> Region:
+    """
+    row tuple: [name, priority, x, y, w, h]
+    """
+
     name = row[0]
-    l = row[1] - row[3] / 2 * ROI_RATIO
-    r = row[1] + row[3] / 2 * ROI_RATIO
-    t = row[2] - row[4] / 2 * ROI_RATIO
-    b = row[2] + row[4] / 2 * ROI_RATIO
-    return Region(name=name, t=t, l=l, b=b, r=r)
+    priority = row[1]
+    l = row[2] - row[4] / 2 * ROI_RATIO
+    r = row[2] + row[4] / 2 * ROI_RATIO
+    t = row[3] - row[5] / 2 * ROI_RATIO
+    b = row[3] + row[5] / 2 * ROI_RATIO
+    return Region(name=name, priority=priority, t=t, l=l, b=b, r=r)

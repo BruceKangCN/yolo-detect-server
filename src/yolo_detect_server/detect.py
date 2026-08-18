@@ -43,10 +43,14 @@ def find_packed(img: np.ndarray) -> list[str]:
     packed = []
     # TODO: 理论上存在误检导致相同库位中存在多个结果的可能性，后续可以考虑进行优化
     for box in boxes:
-        x, y = (box[0] + box[2]) / orig_w, (box[1] + box[3]) / orig_h  # center point, normalized
+        x, y = (
+            (box[0] + box[2]) / orig_w,
+            (box[1] + box[3]) / orig_h,
+        )  # center point, normalized
         for region in REGIONS:
             if region.contains(x, y):
-                packed.append(region.name)
+                packed.append({"name": region.name, "priority": region.priority})
                 break
+    sorted(packed, key=lambda region: region["priority"])
 
-    return packed
+    return [region["name"] for region in packed]

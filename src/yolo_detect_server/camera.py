@@ -10,53 +10,57 @@ import time
 from ctypes import c_uint16
 
 import numpy as np
-
-from API.ScepterDS_api import ScepterTofCam, ScConnectStatus, ScFrameType # type: ignore
-
+from API.ScepterDS_api import (
+    ScConnectStatus,
+    ScepterTofCam,
+    ScFrameType,
+)
 
 camera = ScepterTofCam()
 camera_count = camera.scGetDeviceCount(3000)
 print(f"[scGetDeviceCount] success, ScStatus(0), device count: {camera_count}")
 if camera_count <= 0:
-    print("[scGetDeviceCount] No device found after scanning for 3000ms. Make sure your device is connected.")
-    exit(1)
+    print(
+        "[scGetDeviceCount] No device found after scanning for 3000ms. Make sure your device is connected."
+    )
+    sys.exit(1)
 
 ret, device_infolist = camera.scGetDeviceInfoList(camera_count)
 if ret != 0:
-    print("[scGetDeviceInfoList] fail, ScStatus({})".format(ret))
-    exit(1)
+    print(f"[scGetDeviceInfoList] fail, ScStatus({ret})")
+    sys.exit(1)
 
 device_info = device_infolist[0]
 print(
-    "[scGetDeviceInfoList] success, ScStatus({}). Display the first deviceInfo, <serialNumber>: {} , <ip>: {} , <status>: {}".format(
-        ret,
-        str(device_info.serialNumber.decode()),
-        str(device_info.ip.decode()),
-        str(device_info.status),
-    )
+    " ".join(
+        [
+            f"[scGetDeviceInfoList] success, ScStatus({ret}).",
+            "Display the first device info,",
+            f"<serialNumber>: {device_info.serialNumber.decode()}",
+            f"<ip>: {device_info.ip.decode()}",
+            f"<status>: {device_info.status}",
+        ]
+    ),
 )
-if ScConnectStatus.SC_CONNECTABLE.value != device_info.status:
+if device_info.status != ScConnectStatus.SC_CONNECTABLE.value:
     print(
-        " The first device [status]: {} does not support connection.".format(
-            str(device_info.status)
-        )
+        f" The first device [status]: {device_info.status} does not support connection."
     )
-    exit(1)
+    sys.exit(1)
 
 if (ret := camera.scOpenDeviceBySN(device_info.serialNumber)) != 0:
     print(f"[scOpenDeviceBySN] fail ScStatus({ret}).")
-    exit(1)
-print("[scOpenDeviceBySN] success ScStatus({}).".format(str(ret)))
+    sys.exit(1)
+print(f"[scOpenDeviceBySN] success ScStatus({ret}).")
 
 if (ret := camera.scStartStream()) != 0:
-    print("[scStartStream] fail ScStatus({}).".format(str(ret)))
-    exit(1)
+    print(f"[scStartStream] fail ScStatus({ret}).")
+    sys.exit(1)
 
-print("[scStartStream] success ScStatus({}).".format(str(ret)))
+print(f"[scStartStream] success ScStatus({ret}).")
 # Wait for the device to upload image data.
 time.sleep(1)
 
-colorSlope = c_uint16(7495)
 
 def get_frame() -> np.ndarray | None:
     ret, frame_ready = camera.scGetFrameReady(c_uint16(1200))
