@@ -10,7 +10,7 @@ import time
 from ctypes import c_uint16
 
 import numpy as np
-from API.ScepterDS_api import (
+from API.ScepterDS_api import (  # type: ignore
     ScConnectStatus,
     ScepterTofCam,
     ScFrameType,
