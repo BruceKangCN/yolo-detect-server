@@ -82,7 +82,7 @@ def non_max_suppression(
         union = areas[i] + areas[order[1:]] - inter
         iou = inter / np.maximum(union, 1e-9)
 
-        inds = np.where(iou <= threshold)[0]
+        inds = np.nonzero(iou <= threshold)[0]
         order = order[inds + 1]
 
     return np.array(keep, dtype=int)
@@ -110,7 +110,7 @@ def decode_output(
     from .config import CONF_THRESHOLD, NMS_THRESHOLD, PACKED_CLASS_ID
 
     pred = output[0]  # (4 + nc, num_anchors)
-    # # [cx, cy, w, h] -> [x1, y1, x2, y2]
+    # [cx, cy, w, h] -> [x1, y1, x2, y2]
     cx, cy, w, h = pred[0], pred[1], pred[2], pred[3]
     boxes = np.stack((cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2), axis=1)
     class_scores = pred[4:].T  # (num_anchors, nc)
