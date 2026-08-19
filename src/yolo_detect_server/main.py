@@ -30,7 +30,7 @@ async def detect() -> Detection:
 
 
 @app.get("/test", summary="test endpoint which returns a selected place")
-async def selectdetection(name: str | None = None) -> Detection:
+async def select_region(name: str | None = None) -> Detection:
     if name is None:
         return Detection(code=1)
     return Detection(code=0, packed=[name])
