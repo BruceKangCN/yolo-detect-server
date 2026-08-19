@@ -28,6 +28,9 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.3.0",
+    "ipympl>=0.10.0",
+    "pyside6>=6.11.2",
     "ruff>=0.16.1",
     "uv-script>=0.1.9",
 ]
