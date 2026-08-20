@@ -42,12 +42,12 @@ def main():
     h, w = img.shape[:2]
     img_size = (w, h)
 
-    for name, _priority, x, y, w, h in df.iter_rows():
-        l, t, r, b = xywhn_to_xyxy(x, y, w, h, img_size=img_size, ratio=0.4)
+    for row in df.iter_rows(named=True):
+        l, t, r, b = xywhn_to_xyxy(row["x"], row["y"], row["w"], row["h"], img_size=img_size, ratio=0.4)
         cv.rectangle(img, (l, t), (r, b), color=(102, 255, 204), thickness=3)
         cv.putText(
             img,
-            text=name,
+            text=row["name"],
             org=(l, t),
             fontFace=cv.FONT_HERSHEY_SIMPLEX,
             fontScale=1.0,

@@ -42,15 +42,11 @@ class Detection(BaseModel):
     """
 
 
-def xywh_to_xyxy(row: tuple[str, int, float, float, float, float]) -> Region:
-    """
-    row tuple: [name, priority, x, y, w, h]
-    """
-
-    name = row[0]
-    priority = row[1]
-    l = row[2] - row[4] / 2 * ROI_RATIO
-    r = row[2] + row[4] / 2 * ROI_RATIO
-    t = row[3] - row[5] / 2 * ROI_RATIO
-    b = row[3] + row[5] / 2 * ROI_RATIO
+def xywh_to_xyxy(row: dict) -> Region:
+    name = row["name"]
+    priority = row["priority"]
+    l = row["x"] - row["w"] / 2 * ROI_RATIO
+    r = row["x"] + row["w"] / 2 * ROI_RATIO
+    t = row["y"] - row["h"] / 2 * ROI_RATIO
+    b = row["y"] + row["h"] / 2 * ROI_RATIO
     return Region(name=name, priority=priority, t=t, l=l, b=b, r=r)
