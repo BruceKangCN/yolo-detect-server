@@ -23,7 +23,7 @@ def _init_model() -> RKNN:
 model = _init_model()
 
 df = pl.read_csv("regions.csv")
-REGIONS = [xywh_to_xyxy(row) for row in df.iter_rows()]
+REGIONS = [xywh_to_xyxy(row) for row in df.iter_rows(named=True)]
 
 
 def find_packed(img: np.ndarray) -> list[str]:
