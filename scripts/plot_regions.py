@@ -43,7 +43,14 @@ def main():
     img_size = (w, h)
 
     for row in df.iter_rows(named=True):
-        l, t, r, b = xywhn_to_xyxy(row["x"], row["y"], row["w"], row["h"], img_size=img_size, ratio=0.4)
+        l, t, r, b = xywhn_to_xyxy(
+            row["x"],
+            row["y"],
+            row["w"],
+            row["h"],
+            img_size=img_size,
+            ratio=0.4,
+        )
         cv.rectangle(img, (l, t), (r, b), color=(102, 255, 204), thickness=3)
         cv.putText(
             img,

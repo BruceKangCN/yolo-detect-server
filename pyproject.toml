@@ -35,4 +35,4 @@ dev = [
 [tool.uvs.scripts]
 fmt = "ruff format"
 lint = "ruff check"
-dev = "fastapi dev src/yolo_detect_server/main.py"
+dev = "fastapi dev src/yolo_detect_server/app.py"
