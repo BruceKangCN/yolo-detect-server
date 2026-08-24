@@ -9,6 +9,9 @@ wheels/
 # Virtual environments
 .venv
 
+# User data
+.env
+
 # Data
 /weights
 /regions.csv

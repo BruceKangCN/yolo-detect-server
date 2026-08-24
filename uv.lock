@@ -1814,6 +1814,7 @@ dependencies = [
     { name = "numpy" },
     { name = "polars" },
     { name = "pydantic" },
+    { name = "python-dotenv" },
     { name = "ultralytics" },
     { name = "uvicorn" },
 ]
@@ -1833,6 +1834,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26.4" },
     { name = "polars", specifier = ">=1.43.2" },
     { name = "pydantic", specifier = ">=2.13.4" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
     { name = "ultralytics", specifier = ">=8.4.120" },
     { name = "uvicorn", specifier = ">=0.52.1" },
 ]

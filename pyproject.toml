@@ -12,6 +12,7 @@ dependencies = [
     "numpy>=1.26.4",
     "polars>=1.43.2",
     "pydantic>=2.13.4",
+    "python-dotenv>=1.2.2",
     "ultralytics>=8.4.120",
     "uvicorn>=0.52.1",
 ]
