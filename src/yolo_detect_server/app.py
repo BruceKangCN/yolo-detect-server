@@ -22,8 +22,8 @@ async def lifespan(app: FastAPI):
     yield
 
 
-async def get_model(requst: Request) -> Detector:
-    return requst.app.state.model
+async def get_model(request: Request) -> Detector:
+    return request.app.state.model
 
 
 async def get_camera(request: Request) -> Camera:
