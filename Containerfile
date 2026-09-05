@@ -4,6 +4,14 @@ WORKDIR /app
 
 VOLUME [ "/app/weights" ]
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends libgl1 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY \
     README.md \
     LICENSE \
@@ -18,4 +26,4 @@ COPY ScepterSDK ScepterSDK
 
 RUN uv sync --frozen --no-dev
 
-CMD [ "uv", "run", "src/yolo_detect_server/main.py" ]
+CMD [ "uv", "run", "--no-dev", "src/yolo_detect_server/main.py" ]
