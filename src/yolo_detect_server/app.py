@@ -63,15 +63,15 @@ async def detect_from_fixed(model: ModelDep, camera: CameraDep) -> Detection:
         return Detection(code=1)
 
 
-@app.get("/vihecle")
-async def detect_from_vihecle(model: ModelDep, frame_receiver: FrameReceiverDep):
-    """Detect packs using camera on vihecles (e.g. AGVs).
+@app.get("/vehicle")
+async def detect_from_vehicle(model: ModelDep, frame_receiver: FrameReceiverDep):
+    """Detect packs using camera on vehicles (e.g. AGVs).
 
-    Detect packs using frame from camera on vihecles with YOLO model, and find
+    Detect packs using frame from camera on vehicles with YOLO model, and find
     out locations of packs.
 
     TODO: maybe we should use RGBD camera to get precise relative location of
-    packs from the vihecle to improve detection of locations.
+    packs from the vehicle to improve detection of locations.
     """
     img = frame_receiver.get_frame()
     if img is None:
