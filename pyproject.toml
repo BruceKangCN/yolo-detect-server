@@ -13,6 +13,8 @@ dependencies = [
     "polars>=1.43.2",
     "pydantic>=2.13.4",
     "python-dotenv>=1.2.2",
+    "rknn-toolkit-lite2>=2.3.2 ; platform_machine == 'aarch64'",
+    "rknn-toolkit2>=2.3.2 ; platform_machine == 'AMD64' or platform_machine == 'x86_64'",
     "ultralytics>=8.4.120",
     "uvicorn>=0.52.1",
 ]
