@@ -7,7 +7,7 @@ from .util import xywh_to_xyxy
 
 class Detector:
     def __init__(self, path):
-        self.model = YOLO(path)
+        self.model = YOLO(path, task="detect")
         df = pl.read_csv("regions.csv")
         self.regions = [xywh_to_xyxy(row) for row in df.iter_rows(named=True)]
 
