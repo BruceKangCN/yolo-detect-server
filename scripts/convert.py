@@ -22,6 +22,7 @@ class ArgumentParser(argparse.ArgumentParser):
         self.add_argument("model_path")
         self.add_argument("-p", "--platform", default="rk3588", choices=platforms)
         self.add_argument("-o", "--output_path", default="model.rknn")
+        self.add_argument("-s", "--size", default=640)
 
 
 def main():
@@ -30,9 +31,10 @@ def main():
 
     model_path: str = args.model_path
     platform: str = args.platform
+    imgsz = args.size
 
     model = YOLO(model_path)
-    model.export(format="rknn", name=platform)
+    model.export(format="rknn", name=platform, imgsz=imgsz)
 
 
 if __name__ == "__main__":
